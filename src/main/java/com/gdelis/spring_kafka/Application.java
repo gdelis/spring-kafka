@@ -18,21 +18,28 @@ public class Application {
 
    @Bean
    public NewTopic topic() {
-      return TopicBuilder.name("topic1")
-                         .partitions(10)
+      return TopicBuilder.name("users")
+                         .partitions(1)
                          .replicas(1)
                          .build();
    }
 
-   @KafkaListener(id = "myId", topics = "topic1")
-   public void listen(String in) {
-      System.out.println(in);
+   @KafkaListener(id = "salute-consumer", topics = "users")
+   public void salute(String user) {
+      System.out.println("Hello user: " + user);
+   }
+
+   @KafkaListener(id = "name-consumer", topics = "users")
+   public void name(String user) {
+      System.out.println("Welcome home user: " + user);
    }
 
    @Bean
    public ApplicationRunner runner(KafkaTemplate<String, String> template) {
       return args -> {
-         template.send("topic1", "test");
+         template.send("users", "George Delis");
+         template.send("users", "John Doe");
+         template.send("users", "Jane Doe");
       };
    }
 }
