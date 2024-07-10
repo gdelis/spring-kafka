@@ -1,5 +1,7 @@
 package com.gdelis.spring.kafka.configuration;
 
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.Properties;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
@@ -40,10 +42,8 @@ public class KafkaConfiguration {
 
       kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
       kafkaProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "spring-kafka");
-      kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                          "io.confluent.kafka.serializers.KafkaAvroSerializer");
-      kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                          "io.confluent.kafka.serializers.KafkaAvroSerializer");
+      kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+      kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
 
       return kafkaProperties;
@@ -55,10 +55,8 @@ public class KafkaConfiguration {
 
       kafkaProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
       kafkaProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
-      kafkaProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                          "io.confluent.kafka.serializers.KafkaAvroDeserializer");
-      kafkaProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                          "io.confluent.kafka.serializers.KafkaAvroDeserializer");
+      kafkaProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
+      kafkaProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
       kafkaProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
