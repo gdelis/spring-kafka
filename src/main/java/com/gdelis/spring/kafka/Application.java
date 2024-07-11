@@ -37,7 +37,7 @@ public class Application {
          List<GenericRecord> genericRecords = generateRecords(userAvroSchema);
 
          genericRecords.stream()
-                       .map(s -> new ProducerRecord<String, GenericRecord>("users", null, s))
+                       .map(s -> new ProducerRecord<>("users", "user-details", s))
                        .forEach(record -> producer.send(record, (recordMetadata, e) -> {
                           System.out.println("recordMetadata = " + recordMetadata.toString());
 

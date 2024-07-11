@@ -1,5 +1,6 @@
 package com.gdelis.spring.kafka.configuration;
 
+import com.gdelis.spring.kafka.interceptor.HeadersProducerInterceptor;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.Properties;
@@ -44,6 +45,7 @@ public class KafkaConfiguration {
       kafkaProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "spring-kafka");
       kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+      kafkaProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, HeadersProducerInterceptor.class.getName());
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
 
       return kafkaProperties;
