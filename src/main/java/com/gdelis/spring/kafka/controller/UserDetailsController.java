@@ -1,0 +1,43 @@
+package com.gdelis.spring.kafka.controller;
+
+import com.gdelis.spring.kafka.UserDetails;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.GenericRecordBuilder;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/users")
+public class UserDetailsController {
+
+   private final KafkaProducer<String, GenericRecord> kafkaProducer;
+   private final Schema userAvroSchema;
+
+   public UserDetailsController(
+       @Qualifier("usersKafkaProducer") final KafkaProducer<String, GenericRecord> kafkaProducer,
+       @Qualifier("usersAvroSchema") final Schema userAvroSchema) {
+      this.kafkaProducer = kafkaProducer;
+      this.userAvroSchema = userAvroSchema;
+   }
+
+   @PostMapping
+   public void createUser(@RequestBody final UserDetails user) {
+
+      GenericRecordBuilder genericRecordBuilder = new GenericRecordBuilder(userAvroSchema);
+
+      genericRecordBuilder.set("firstName", user.firstName());
+      genericRecordBuilder.set("lastName", user.lastName());
+      genericRecordBuilder.set("telephone", user.telephone());
+
+      ProducerRecord<String, GenericRecord> userProducerRecord =
+          new ProducerRecord<>("users", genericRecordBuilder.build());
+
+      kafkaProducer.send(userProducerRecord);
+   }
+}
