@@ -1,5 +1,6 @@
 package com.gdelis.spring.kafka;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.avro.Schema;
@@ -29,15 +30,15 @@ public class Application {
    }
 
    @Bean
-   @DependsOn("producerRunner")
-   public ApplicationRunner usersRunner(
+   @DependsOn("usersProducerRunner")
+   public ApplicationRunner usersConsumerRunner(
        @Qualifier("usersKafkaConsumer") KafkaConsumer<String, GenericRecord> consumer) {
       return args -> {
          consumer.subscribe(List.of(topic));
 
          try {
             while (true) {
-               ConsumerRecords<String, GenericRecord> records = consumer.poll(100);
+               ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofSeconds(1));
                for (ConsumerRecord<String, GenericRecord> r : records) {
                   System.out.printf("group = user-group-1, "
                                         + "offset = %d, "
@@ -52,7 +53,7 @@ public class Application {
    }
 
    @Bean
-   public ApplicationRunner producerRunner(
+   public ApplicationRunner usersProducerRunner(
        @Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
        @Qualifier("usersAvroSchema") Schema userAvroSchema) {
 
