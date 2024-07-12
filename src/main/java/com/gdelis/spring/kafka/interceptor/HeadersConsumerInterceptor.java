@@ -1,16 +1,16 @@
 package com.gdelis.spring.kafka.interceptor;
 
-import com.gdelis.spring.kafka.User;
+import com.gdelis.spring.kafka.UserDetails;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 
-public class HeadersConsumerInterceptor implements ConsumerInterceptor<String, User> {
+public class HeadersConsumerInterceptor implements ConsumerInterceptor<String, UserDetails> {
 
    @Override
-   public ConsumerRecords<String, User> onConsume(final ConsumerRecords<String, User> consumerRecords) {
+   public ConsumerRecords<String, UserDetails> onConsume(final ConsumerRecords<String, UserDetails> consumerRecords) {
 
       consumerRecords.forEach(record -> {
          record.headers()

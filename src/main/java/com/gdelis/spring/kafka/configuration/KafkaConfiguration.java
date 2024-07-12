@@ -2,7 +2,6 @@ package com.gdelis.spring.kafka.configuration;
 
 import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
 import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
-import com.gdelis.spring.kafka.interceptor.HeadersConsumerInterceptor;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.Properties;
@@ -63,7 +62,7 @@ public class KafkaConfiguration {
       kafkaProperties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
       kafkaProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
       kafkaProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
-      kafkaProperties.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, HeadersConsumerInterceptor.class.getName());
+      //kafkaProperties.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, HeadersConsumerInterceptor.class.getName());
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
       kafkaProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
