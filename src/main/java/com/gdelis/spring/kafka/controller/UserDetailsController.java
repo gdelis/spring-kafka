@@ -1,12 +1,14 @@
 package com.gdelis.spring.kafka.controller;
 
 import com.gdelis.spring.kafka.UserDetails;
+import com.gdelis.spring.kafka.exception.KafkaException;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,7 @@ public class UserDetailsController {
    }
 
    @PostMapping
-   public void createUser(@RequestBody final UserDetails user) {
+   public ResponseEntity<UserDetails> createUser(@RequestBody final UserDetails user) {
 
       GenericRecordBuilder genericRecordBuilder = new GenericRecordBuilder(userAvroSchema);
 
@@ -38,6 +40,14 @@ public class UserDetailsController {
       ProducerRecord<String, GenericRecord> userProducerRecord =
           new ProducerRecord<>("users", genericRecordBuilder.build());
 
-      kafkaProducer.send(userProducerRecord);
+      kafkaProducer.send(userProducerRecord, (metadata, exception) -> {
+         if (exception != null) {
+            System.out.println("exception = " + exception.getMessage());
+
+            throw new KafkaException("kafka exception");
+         }
+      });
+
+      return ResponseEntity.ok(user);
    }
 }
