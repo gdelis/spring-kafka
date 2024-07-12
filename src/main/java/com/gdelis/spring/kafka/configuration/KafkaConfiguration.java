@@ -1,6 +1,8 @@
 package com.gdelis.spring.kafka.configuration;
 
-import com.gdelis.spring.kafka.interceptor.HeadersProducerInterceptor;
+import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
+import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
+import com.gdelis.spring.kafka.interceptor.HeadersConsumerInterceptor;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.Properties;
@@ -30,7 +32,7 @@ public class KafkaConfiguration {
     * @return
     */
    @Bean
-   public NewTopic users() {
+   NewTopic users() {
       return TopicBuilder.name(topic)
                          .partitions(1)
                          .replicas(1)
@@ -38,27 +40,30 @@ public class KafkaConfiguration {
    }
 
    @Bean
-   public Properties kafkaProducerProperties() {
+   Properties kafkaProducerProperties() {
       Properties kafkaProperties = new Properties();
 
       kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-      kafkaProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "spring-kafka");
+      kafkaProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "producer-user-group-1");
       kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-      kafkaProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, HeadersProducerInterceptor.class.getName());
+      kafkaProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, String.join(",",
+                                                                                 DateHeaderProducerInterceptor.class.getName(),
+                                                                                 AuthorHeaderProducerInterceptor.class.getName()));
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
 
       return kafkaProperties;
    }
 
    @Bean
-   public Properties kafkaConsumerProperties() {
+   Properties usersKafkaConsumerProperties(@Value("${kafka.users.consumer.group.id}") String consumerGroupId) {
       Properties kafkaProperties = new Properties();
 
       kafkaProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-      kafkaProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
+      kafkaProperties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
       kafkaProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
       kafkaProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
+      kafkaProperties.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, HeadersConsumerInterceptor.class.getName());
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
       kafkaProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
@@ -66,7 +71,7 @@ public class KafkaConfiguration {
    }
 
    @Bean
-   public Schema userAvroSchema() {
+   Schema usersAvroSchema() {
       return SchemaBuilder.record("User")
                           .fields()
                           .requiredString("firstName")
@@ -80,15 +85,15 @@ public class KafkaConfiguration {
    }
 
    @Bean
-   public KafkaProducer<String, GenericRecord> userKafkaProducer(
+   KafkaProducer<String, GenericRecord> usersKafkaProducer(
        @Qualifier("kafkaProducerProperties") final Properties producerProperties) {
 
       return new KafkaProducer<>(producerProperties);
    }
 
    @Bean
-   public KafkaConsumer<String, GenericRecord> userKafkaConsumer(
-       @Qualifier("kafkaConsumerProperties") final Properties consumerProperties) {
+   KafkaConsumer<String, GenericRecord> usersKafkaConsumer(
+       @Qualifier("usersKafkaConsumerProperties") final Properties consumerProperties) {
       return new KafkaConsumer<>(consumerProperties);
    }
 }

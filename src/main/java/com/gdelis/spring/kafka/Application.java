@@ -29,15 +29,38 @@ public class Application {
    }
 
    @Bean
+   @DependsOn("producerRunner")
+   public ApplicationRunner usersRunner(
+       @Qualifier("usersKafkaConsumer") KafkaConsumer<String, GenericRecord> consumer) {
+      return args -> {
+         consumer.subscribe(List.of(topic));
+
+         try {
+            while (true) {
+               ConsumerRecords<String, GenericRecord> records = consumer.poll(100);
+               for (ConsumerRecord<String, GenericRecord> r : records) {
+                  System.out.printf("group = user-group-1, "
+                                        + "offset = %d, "
+                                        + "key = %s, "
+                                        + "value = %s \n", r.offset(), r.key(), r.value());
+               }
+            }
+         } finally {
+            consumer.close();
+         }
+      };
+   }
+
+   @Bean
    public ApplicationRunner producerRunner(
-       @Qualifier("userKafkaProducer") KafkaProducer<String, GenericRecord> producer,
-       @Qualifier("userAvroSchema") Schema userAvroSchema) {
+       @Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
+       @Qualifier("usersAvroSchema") Schema userAvroSchema) {
 
       return args -> {
          List<GenericRecord> genericRecords = generateRecords(userAvroSchema);
 
          genericRecords.stream()
-                       .map(s -> new ProducerRecord<>("users", "user-details", s))
+                       .map(s -> new ProducerRecord<String, GenericRecord>("users", s))
                        .forEach(record -> producer.send(record, (recordMetadata, e) -> {
                           System.out.println("recordMetadata = " + recordMetadata.toString());
 
@@ -48,33 +71,12 @@ public class Application {
       };
    }
 
-   @Bean
-   @DependsOn("producerRunner")
-   public ApplicationRunner consumerRunner(
-       @Qualifier("userKafkaConsumer") KafkaConsumer<String, GenericRecord> consumer) {
-      return args -> {
-         consumer.subscribe(List.of(topic));
-
-         try {
-            while (true) {
-               ConsumerRecords<String, GenericRecord> records = consumer.poll(100);
-               for (ConsumerRecord<String, GenericRecord> r : records) {
-                  System.out.printf("offset = %d, key = %s, value = %s \n", r.offset(), r.key(),
-                                    r.value());
-               }
-            }
-         } finally {
-            consumer.close();
-         }
-      };
-   }
-
    private List<GenericRecord> generateRecords(final Schema userAvroSchema) {
       List<GenericRecord> records = new ArrayList<>();
 
       GenericRecordBuilder genericRecordBuilder = new GenericRecordBuilder(userAvroSchema);
 
-      for (int i = 0; i < 10; i++) {
+      for (int i = 10; i < 20; i++) {
          genericRecordBuilder.set("firstName", "George-" + i);
          genericRecordBuilder.set("lastName", "Delis-" + i);
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
