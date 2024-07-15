@@ -1,5 +1,6 @@
 package com.gdelis.spring.kafka.configuration;
 
+import com.gdelis.spring.kafka.CountryEnum;
 import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
 import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
@@ -23,7 +24,7 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaConfiguration {
 
    @Value("${kafka.users.topic}")
-   private String topic;
+   private String usersTopic;
 
    /**
     * Causes the topic to be created on the broker; it is not needed if the topic already exists.
@@ -32,7 +33,7 @@ public class KafkaConfiguration {
     */
    @Bean
    NewTopic users() {
-      return TopicBuilder.name(topic)
+      return TopicBuilder.name(usersTopic)
                          .partitions(1)
                          .replicas(1)
                          .build();
@@ -71,15 +72,16 @@ public class KafkaConfiguration {
 
    @Bean
    Schema usersAvroSchema() {
+
       return SchemaBuilder.record("User")
                           .fields()
+                          .requiredString("username")
                           .requiredString("firstName")
                           .requiredString("lastName")
-                          .name("telephone")
-                          .type()
-                          .nullable()
-                          .stringType()
-                          .noDefault()
+                          .requiredString("email")
+                          .name("telephone").type().nullable().stringType().noDefault()
+                          .name("country").type().enumeration("CountryEnum").symbols(CountryEnum.GR.getAbbreviation(), CountryEnum.USA.getAbbreviation(), CountryEnum.UK.getAbbreviation(), CountryEnum.OTHER.getAbbreviation()).enumDefault(CountryEnum.OTHER.getAbbreviation())
+                          .name("details").type().nullable().map().values().stringType().noDefault()
                           .endRecord();
    }
 

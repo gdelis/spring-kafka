@@ -3,6 +3,7 @@ package com.gdelis.spring.kafka;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
@@ -78,9 +79,13 @@ public class Application {
       GenericRecordBuilder genericRecordBuilder = new GenericRecordBuilder(userAvroSchema);
 
       for (int i = 10; i < 20; i++) {
+         genericRecordBuilder.set("username", "george/delis-" + i);
          genericRecordBuilder.set("firstName", "George-" + i);
          genericRecordBuilder.set("lastName", "Delis-" + i);
+         genericRecordBuilder.set("email", "gdelis1989@gmail.com");
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
+         genericRecordBuilder.set("country", CountryEnum.GR.getAbbreviation());
+         genericRecordBuilder.set("details", Map.of("city", "tripoli", "providence", "arcadia"));
 
          records.add(genericRecordBuilder.build());
       }

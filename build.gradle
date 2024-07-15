@@ -32,6 +32,7 @@ dependencies {
   implementation 'org.apache.avro:avro-maven-plugin:1.11.3'
   implementation 'org.apache.avro:avro-compiler:1.11.3'
   implementation 'io.confluent:kafka-avro-serializer:7.6.1'
+  implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
 
   compileOnly 'org.projectlombok:lombok'
 
