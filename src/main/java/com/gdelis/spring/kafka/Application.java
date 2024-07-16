@@ -70,6 +70,8 @@ public class Application {
                              System.out.println(e.getMessage());
                           }
                        }));
+
+         //producer.close();
       };
    }
 
@@ -84,7 +86,7 @@ public class Application {
          genericRecordBuilder.set("lastName", "Delis-" + i);
          genericRecordBuilder.set("email", "gdelis1989@gmail.com");
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
-         genericRecordBuilder.set("country", CountryEnum.GR.getAbbreviation());
+         //genericRecordBuilder.set("country", CountryEnum.GR.getAbbreviation());
          genericRecordBuilder.set("details", Map.of("city", "tripoli", "providence", "arcadia"));
 
          records.add(genericRecordBuilder.build());
