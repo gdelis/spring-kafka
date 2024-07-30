@@ -79,9 +79,24 @@ public class KafkaConfiguration {
                           .requiredString("firstName")
                           .requiredString("lastName")
                           .requiredString("email")
-                          .name("telephone").type().nullable().stringType().noDefault()
-                          .name("country").type().enumeration("CountryEnum").symbols(CountryEnum.GR.getAbbreviation(), CountryEnum.USA.getAbbreviation(), CountryEnum.UK.getAbbreviation(), CountryEnum.OTHER.getAbbreviation()).enumDefault(CountryEnum.OTHER.getAbbreviation())
-                          .name("details").type().nullable().map().values().stringType().noDefault()
+                          .name("telephone")
+                          .type()
+                          .nullable()
+                          .stringType()
+                          .noDefault()
+                          .name("country")
+                          .type()
+                          .enumeration("CountryEnum")
+                          .symbols(CountryEnum.GR.getAbbreviation(), CountryEnum.USA.getAbbreviation(),
+                                   CountryEnum.UK.getAbbreviation(), CountryEnum.OTHER.getAbbreviation())
+                          .enumDefault(CountryEnum.OTHER.getAbbreviation())
+                          .name("details")
+                          .type()
+                          .nullable()
+                          .map()
+                          .values()
+                          .stringType()
+                          .noDefault()
                           .endRecord();
    }
 
