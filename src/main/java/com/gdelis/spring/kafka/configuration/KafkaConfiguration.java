@@ -1,6 +1,7 @@
 package com.gdelis.spring.kafka.configuration;
 
 import com.gdelis.spring.kafka.CountryEnum;
+import com.gdelis.spring.kafka.UserTypeEnum;
 import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
 import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
@@ -94,6 +95,11 @@ public class KafkaConfiguration {
                           .symbols(CountryEnum.GR.getAbbreviation(), CountryEnum.USA.getAbbreviation(),
                                    CountryEnum.UK.getAbbreviation(), CountryEnum.OTHER.getAbbreviation())
                           .enumDefault(CountryEnum.OTHER.getAbbreviation())
+                          .name("type")
+                          .type()
+                          .enumeration("UserTypeEnum")
+                          .symbols(UserTypeEnum.USER.name(), UserTypeEnum.ADMIN.name())
+                          .enumDefault(UserTypeEnum.USER.name())
                           .name("details")
                           .type()
                           .nullable()
