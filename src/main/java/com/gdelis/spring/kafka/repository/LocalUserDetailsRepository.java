@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LocalUserDetailsRepository {
+public class LocalUserDetailsRepository implements UserDetailsRepository {
 
    private final List<UserDetails> users;
 
@@ -14,7 +14,13 @@ public class LocalUserDetailsRepository {
       this.users = new ArrayList<>();
    }
 
+   @Override
    public void save(final UserDetails user) {
       this.users.add(user);
+   }
+
+   @Override
+   public List<UserDetails> findAll() {
+      return users;
    }
 }
