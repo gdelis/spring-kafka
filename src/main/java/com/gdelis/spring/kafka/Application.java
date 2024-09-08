@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -84,7 +85,18 @@ public class Application {
          genericRecordBuilder.set("lastName", "Delis-" + i);
          genericRecordBuilder.set("email", "gdelis1989@gmail.com");
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
-         genericRecordBuilder.set("country", CountryEnum.GR.getAbbreviation());
+
+         GenericData.EnumSymbol country = new GenericData.EnumSymbol(
+             userAvroSchema.getField("country")
+                           .schema(),
+             CountryEnum.GR.getAbbreviation());
+         genericRecordBuilder.set("country", country);
+
+         GenericData.EnumSymbol type = new GenericData.EnumSymbol(
+             userAvroSchema.getField("type")
+                           .schema(),
+             UserTypeEnum.ADMIN.name());
+         genericRecordBuilder.set("type", type);
          genericRecordBuilder.set("details", Map.of("city", "tripoli", "providence", "arcadia"));
 
          records.add(genericRecordBuilder.build());
