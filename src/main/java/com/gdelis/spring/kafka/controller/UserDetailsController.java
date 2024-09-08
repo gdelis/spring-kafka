@@ -1,7 +1,6 @@
 package com.gdelis.spring.kafka.controller;
 
 import com.gdelis.spring.kafka.UserDetails;
-import com.gdelis.spring.kafka.repository.UserDetailsRepository;
 import com.gdelis.spring.kafka.service.UserDetailsService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserDetailsController {
 
    private final UserDetailsService userDetailsService;
-   private final UserDetailsRepository userDetailsRepository;
 
-   public UserDetailsController(final UserDetailsService userDetailsService,
-                                final UserDetailsRepository userDetailsRepository) {
+   public UserDetailsController(final UserDetailsService userDetailsService) {
       this.userDetailsService = userDetailsService;
-      this.userDetailsRepository = userDetailsRepository;
    }
 
    @GetMapping
    public ResponseEntity<List<UserDetails>> getUserDetails() {
-      return ResponseEntity.ok(userDetailsRepository.findAll());
+      return ResponseEntity.ok(userDetailsService.getAllUserDetails());
    }
 
    @PostMapping

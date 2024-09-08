@@ -2,6 +2,8 @@ package com.gdelis.spring.kafka.service;
 
 import com.gdelis.spring.kafka.UserDetails;
 import com.gdelis.spring.kafka.exception.KafkaException;
+import com.gdelis.spring.kafka.repository.UserDetailsRepository;
+import java.util.List;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -16,12 +18,15 @@ public class LocalUserDetailsService implements UserDetailsService {
 
    private final KafkaProducer<String, GenericRecord> kafkaProducer;
    private final Schema userAvroSchema;
+   private final UserDetailsRepository userDetailsRepository;
 
    public LocalUserDetailsService(
        @Qualifier("usersKafkaProducer") final KafkaProducer<String, GenericRecord> kafkaProducer,
-       @Qualifier("usersAvroSchema") final Schema userAvroSchema) {
+       @Qualifier("usersAvroSchema") final Schema userAvroSchema,
+       final UserDetailsRepository userDetailsRepository) {
       this.kafkaProducer = kafkaProducer;
       this.userAvroSchema = userAvroSchema;
+      this.userDetailsRepository = userDetailsRepository;
    }
 
    @Override
@@ -63,5 +68,10 @@ public class LocalUserDetailsService implements UserDetailsService {
       });
 
       return user;
+   }
+
+   @Override
+   public List<UserDetails> getAllUserDetails() {
+      return userDetailsRepository.findAll();
    }
 }
