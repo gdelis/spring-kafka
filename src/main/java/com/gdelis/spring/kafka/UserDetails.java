@@ -12,4 +12,5 @@ public record UserDetails(String username,
                           @Telephone
                           String telephone,
                           CountryEnum country,
+                          UserTypeEnum type,
                           Map<String, String> details) {}

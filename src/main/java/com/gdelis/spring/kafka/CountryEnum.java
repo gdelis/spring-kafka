@@ -18,4 +18,14 @@ public enum CountryEnum {
       this.abbreviation = abbreviation;
       this.continent = continent;
    }
+
+   public static CountryEnum getCountryEnumFromAbbreviationValue(final String abbreviation) {
+      for (CountryEnum countryEnum : CountryEnum.values()) {
+         if (countryEnum.getAbbreviation()
+                        .equals(abbreviation)) {
+            return countryEnum;
+         }
+      }
+      return CountryEnum.OTHER;
+   }
 }

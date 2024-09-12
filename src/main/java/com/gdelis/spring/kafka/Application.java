@@ -1,10 +1,12 @@
 package com.gdelis.spring.kafka;
 
+import com.gdelis.spring.kafka.repository.UserDetailsRepository;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -33,7 +35,8 @@ public class Application {
    @Bean
    @DependsOn("usersProducerRunner")
    public ApplicationRunner usersConsumerRunner(
-       @Qualifier("usersKafkaConsumer") KafkaConsumer<String, GenericRecord> consumer) {
+       @Qualifier("usersKafkaConsumer") KafkaConsumer<String, GenericRecord> consumer,
+       final UserDetailsRepository repository) {
       return args -> {
          consumer.subscribe(List.of(topic));
 
@@ -45,6 +48,9 @@ public class Application {
                                         + "offset = %d, "
                                         + "key = %s, "
                                         + "value = %s \n", r.offset(), r.key(), r.value());
+
+                  UserDetails userDetails = userDetailsConverter(r);
+                  repository.save(userDetails);
                }
             }
          } finally {
@@ -70,8 +76,6 @@ public class Application {
                              System.out.println(e.getMessage());
                           }
                        }));
-
-         //producer.close();
       };
    }
 
@@ -86,7 +90,18 @@ public class Application {
          genericRecordBuilder.set("lastName", "Delis-" + i);
          genericRecordBuilder.set("email", "gdelis1989@gmail.com");
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
-         //genericRecordBuilder.set("country", CountryEnum.GR.getAbbreviation());
+
+         GenericData.EnumSymbol country = new GenericData.EnumSymbol(
+             userAvroSchema.getField("country")
+                           .schema(),
+             CountryEnum.GR.getAbbreviation());
+         genericRecordBuilder.set("country", country);
+
+         GenericData.EnumSymbol type = new GenericData.EnumSymbol(
+             userAvroSchema.getField("type")
+                           .schema(),
+             UserTypeEnum.ADMIN.name());
+         genericRecordBuilder.set("type", type);
          genericRecordBuilder.set("details", Map.of("city", "tripoli", "providence", "arcadia"));
 
          records.add(genericRecordBuilder.build());
@@ -94,5 +109,34 @@ public class Application {
 
       return records;
    }
-}
 
+   private UserDetails userDetailsConverter(final ConsumerRecord<String, GenericRecord> r) {
+      CountryEnum country = CountryEnum.getCountryEnumFromAbbreviationValue(r.value()
+                                                                             .get("country")
+                                                                             .toString());
+
+      UserTypeEnum type = UserTypeEnum.valueOf(r.value()
+                                                .get("type")
+                                                .toString());
+
+      return new UserDetails(
+          r.value()
+           .get("username")
+           .toString(),
+          r.value()
+           .get("firstName")
+           .toString(),
+          r.value()
+           .get("lastName")
+           .toString(),
+          r.value()
+           .get("email")
+           .toString(),
+          r.value()
+           .get("telephone")
+           .toString(),
+          country,
+          type,
+          null);
+   }
+}
