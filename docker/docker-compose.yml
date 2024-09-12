@@ -53,6 +53,14 @@ services:
     environment:
       CONNECT_BOOTSTRAP_SERVERS: broker:29092
       CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_REST_PORT: 8083
+
+      CONNECT_DATABASE_HOSTNAME: "postgres"
+      CONNECT_DATABASE_PORT: "5432"
+      CONNECT_DATABASE_USER: "username"
+      CONNECT_DATABASE_PASSWORD: "password"
+      CONNECT_DATABASE_DBNAME: "users"
+
       CONNECT_CONFIG_STORAGE_TOPIC: _connect_configs
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_OFFSET_STORAGE_TOPIC: _connect_offset
@@ -61,12 +69,18 @@ services:
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      CONNECT_LOG4J_LOGGERS: "org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR"
+
+    volumes:
+      - ./kafka-connect-plugins:/usr/share/java
 
   #  kafka-rest:
   #    image: confluentinc/cp-kafka-rest:latest.arm64
@@ -114,3 +128,13 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'  # not necessary, added for tests
       KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED: 'true'
       KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED: 'true'
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    ports:
+      - "5432:5432"
