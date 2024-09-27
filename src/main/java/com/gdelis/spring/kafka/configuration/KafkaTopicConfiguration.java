@@ -8,10 +8,10 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfiguration {
-
+   
    @Value("${kafka.users.topic}")
    private String usersTopic;
-
+   
    /**
     * Causes the topic to be created on the broker; it is not needed if the topic already exists.
     *
