@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = TelephoneValidator.class)
 public @interface Telephone {
    String message() default "Invalid telephone format";
-
+   
    Class<?>[] groups() default {};
-
+   
    Class<? extends Payload>[] payload() default {};
 }

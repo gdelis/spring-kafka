@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AvroSchemaConfiguration {
-
+   
    @Bean
    Schema usersAvroSchema() {
-
+      
       return SchemaBuilder.record("User")
                           .fields()
                           .requiredString("username")
@@ -27,8 +27,10 @@ public class AvroSchemaConfiguration {
                           .name("country")
                           .type()
                           .enumeration("CountryEnum")
-                          .symbols(CountryEnum.GR.getAbbreviation(), CountryEnum.USA.getAbbreviation(),
-                                   CountryEnum.UK.getAbbreviation(), CountryEnum.OTHER.getAbbreviation())
+                          .symbols(CountryEnum.GR.getAbbreviation(),
+                                   CountryEnum.USA.getAbbreviation(),
+                                   CountryEnum.UK.getAbbreviation(),
+                                   CountryEnum.OTHER.getAbbreviation())
                           .enumDefault(CountryEnum.OTHER.getAbbreviation())
                           .name("type")
                           .type()
@@ -44,5 +46,4 @@ public class AvroSchemaConfiguration {
                           .noDefault()
                           .endRecord();
    }
-
 }
