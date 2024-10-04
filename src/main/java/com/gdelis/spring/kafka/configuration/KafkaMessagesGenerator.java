@@ -30,35 +30,6 @@ import org.springframework.stereotype.Component;
 public class KafkaMessagesGenerator {
    
    @Bean
-   @DependsOn("usersProducerRunner")
-   public ApplicationRunner usersConsumerRunner(
-       @Qualifier("usersKafkaConsumer") KafkaConsumer<String, GenericRecord> consumer,
-       final UserDetailsRepository repository,
-       @Value("${kafka.users.topic}") String topic) {
-      
-      return args -> {
-         consumer.subscribe(List.of(topic));
-         
-         try {
-            while (true) {
-               ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofSeconds(1));
-               for (ConsumerRecord<String, GenericRecord> r : records) {
-                  System.out.printf("group = user-group-1, " + "offset = %d, " + "key = %s, " + "value = %s \n",
-                                    r.offset(),
-                                    r.key(),
-                                    r.value());
-                  
-                  UserDetails userDetails = userDetailsConverter(r);
-                  repository.save(userDetails);
-               }
-            }
-         } finally {
-            consumer.close();
-         }
-      };
-   }
-   
-   @Bean
    public ApplicationRunner usersProducerRunner(
        @Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
        @Qualifier("usersAvroSchema") Schema userAvroSchema,
@@ -111,33 +82,5 @@ public class KafkaMessagesGenerator {
       }
       
       return records;
-   }
-   
-   private UserDetails userDetailsConverter(final ConsumerRecord<String, GenericRecord> r) {
-      CountryEnum country = CountryEnum.getCountryEnumFromAbbreviationValue(r.value()
-                                                                             .get("country")
-                                                                             .toString());
-      UserTypeEnum type = UserTypeEnum.valueOf(r.value()
-                                                .get("type")
-                                                .toString());
-      
-      return new UserDetails(r.value()
-                              .get("username")
-                              .toString(),
-                             r.value()
-                              .get("firstName")
-                              .toString(),
-                             r.value()
-                              .get("lastName")
-                              .toString(),
-                             r.value()
-                              .get("email")
-                              .toString(),
-                             r.value()
-                              .get("telephone")
-                              .toString(),
-                             country,
-                             type,
-                             null);
    }
 }
