@@ -9,18 +9,16 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfiguration {
    
-   @Value("${kafka.users.topic}")
-   private String usersTopic;
-   
    /**
     * Causes the topic to be created on the broker; it is not needed if the topic already exists.
     *
     * @return
     */
    @Bean
-   NewTopic users() {
+   NewTopic users(@Value("${kafka.users.topic.partitions}") final Integer partitionCount,
+                  @Value("${kafka.users.topic.name}") final String usersTopic) {
       return TopicBuilder.name(usersTopic)
-                         .partitions(3)
+                         .partitions(partitionCount)
                          .replicas(1)
                          .build();
    }
