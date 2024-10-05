@@ -17,6 +17,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -42,33 +43,38 @@ public class KafkaConsumerConfiguration {
    
    @Bean
    @DependsOn("usersProducerRunner")
-   KafkaConsumer<String, GenericRecord> usersKafkaConsumer(
-       @Qualifier("usersKafkaConsumerProperties") final Properties consumerProperties,
-       @Value("${kafka.users.topic}") final String topic,
-       final UserDetailsRepository userDetailsRepository) {
+   ApplicationRunner usersKafkaConsumer(@Qualifier("usersKafkaConsumerProperties") final Properties consumerProperties,
+                                        @Value("${kafka.users.topic.name}") final String topic,
+                                        @Value("${kafka.users.topic.partitions}") final Integer partitions,
+                                        @Value("${kafka.users.topic.polling}") final Integer polling,
+                                        final UserDetailsRepository userDetailsRepository) {
       
-      for (int i = 0; i < 3; i++) {
-         new Thread(() -> {
-            KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);
-            consumer.subscribe(List.of(topic));
-            
-            while (true) {
-               ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(100));
-               for (ConsumerRecord<String, GenericRecord> record : records) {
-                  System.out.printf("Thread %s consumed record with key %s and value %s%n",
-                                    Thread.currentThread()
-                                          .getId(),
-                                    record.key(),
-                                    record.value());
+      return args -> {
+         for (int i = 0; i < partitions; i++) {
+            new Thread(() -> {
+               KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);
+               
+               try (consumer) {
+                  consumer.subscribe(List.of(topic));
                   
-                  UserDetails userDetails = userDetailsConverter(record);
-                  userDetailsRepository.save(userDetails);
+                  while (true) {
+                     ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(polling));
+                     
+                     for (ConsumerRecord<String, GenericRecord> record : records) {
+                        System.out.printf("Thread %s consumed record with key %s and value %s%n",
+                                          Thread.currentThread()
+                                                .threadId(),
+                                          record.key(),
+                                          record.value());
+                        
+                        UserDetails userDetails = userDetailsConverter(record);
+                        userDetailsRepository.save(userDetails);
+                     }
+                  }
                }
-            }
-         }).start();
-      }
-      
-      return new KafkaConsumer<>(consumerProperties);
+            }).start();
+         }
+      };
    }
    
    private UserDetails userDetailsConverter(final ConsumerRecord<String, GenericRecord> r) {
