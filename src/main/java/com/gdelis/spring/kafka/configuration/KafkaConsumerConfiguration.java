@@ -66,6 +66,10 @@ public class KafkaConsumerConfiguration {
                                         @Value("${kafka.users.topic.polling}") final Integer polling,
                                         final UserDetailsRepository userDetailsRepository) {
       
+      // This should be an external attribute to trigger when the process of kafka messages should stop
+      // For example, when kafka is rebalancing
+      Boolean closing = false;
+      
       return args -> {
          for (int i = 0; i < partitions; i++) {
             new Thread(() -> {
@@ -73,7 +77,7 @@ public class KafkaConsumerConfiguration {
                try (KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);) {
                   consumer.subscribe(List.of(topic));
                   
-                  while (true) {
+                  while (! closing) {
                      ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(polling));
                      
                      for (ConsumerRecord<String, GenericRecord> record : records) {
@@ -89,8 +93,9 @@ public class KafkaConsumerConfiguration {
                      
                      consumer.commitAsync(offsetCommitCallback);
                   }
-               }
-               catch (Exception e) {
+                  
+                  consumer.commitSync();
+               } catch (Exception e) {
                   e.printStackTrace();
                }
             }).start();
