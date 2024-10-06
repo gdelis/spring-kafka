@@ -69,9 +69,8 @@ public class KafkaConsumerConfiguration {
       return args -> {
          for (int i = 0; i < partitions; i++) {
             new Thread(() -> {
-               KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);
                
-               try (consumer) {
+               try (KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);) {
                   consumer.subscribe(List.of(topic));
                   
                   while (true) {
@@ -90,6 +89,9 @@ public class KafkaConsumerConfiguration {
                      
                      consumer.commitAsync(offsetCommitCallback);
                   }
+               }
+               catch (Exception e) {
+                  e.printStackTrace();
                }
             }).start();
          }
