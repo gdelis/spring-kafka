@@ -77,7 +77,7 @@ public class KafkaConsumerConfiguration {
                try (KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);) {
                   consumer.subscribe(List.of(topic));
                   
-                  while (! closing) {
+                  while (!closing) {
                      ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(polling));
                      
                      for (ConsumerRecord<String, GenericRecord> record : records) {
