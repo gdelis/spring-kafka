@@ -14,6 +14,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetCommitCallback;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,15 @@ import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 public class KafkaConsumerConfiguration {
+   
+   // We just log any error during the offset commit - check book
+   private final OffsetCommitCallback offsetCommitCallback = (map, e) -> {
+      if (e != null) {
+         System.out.println("Exception: " + e.getMessage());
+      }
+      
+      // System.out.println("map = " + map);
+   };
    
    @Bean
    Properties usersKafkaConsumerProperties(@Value("${kafka.users.consumer.group.id}") String consumerGroupId) {
@@ -37,6 +47,13 @@ public class KafkaConsumerConfiguration {
       kafkaProperties.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, HeadersConsumerInterceptor.class.getName());
       kafkaProperties.put("schema.registry.url", "http://localhost:8081");
       kafkaProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+      
+      // Automatic commit configuration:
+      // kafkaProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
+      // kafkaProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 1000);
+      
+      // Manual and asynchronous commit configuration:
+      kafkaProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
       
       return kafkaProperties;
    }
@@ -70,6 +87,8 @@ public class KafkaConsumerConfiguration {
                         UserDetails userDetails = userDetailsConverter(record);
                         userDetailsRepository.save(userDetails);
                      }
+                     
+                     consumer.commitAsync(offsetCommitCallback);
                   }
                }
             }).start();
