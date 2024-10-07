@@ -31,8 +31,6 @@ public class KafkaConsumerConfiguration {
       if (e != null) {
          System.out.println("Exception: " + e.getMessage());
       }
-      
-      // System.out.println("map = " + map);
    };
    
    @Bean
