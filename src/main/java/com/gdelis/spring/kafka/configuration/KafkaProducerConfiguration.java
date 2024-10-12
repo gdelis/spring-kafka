@@ -2,6 +2,7 @@ package com.gdelis.spring.kafka.configuration;
 
 import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
 import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.Properties;
 import org.apache.avro.generic.GenericRecord;
@@ -28,7 +29,7 @@ public class KafkaProducerConfiguration {
                           String.join(",",
                                       DateHeaderProducerInterceptor.class.getName(),
                                       AuthorHeaderProducerInterceptor.class.getName()));
-      kafkaProperties.put("schema.registry.url", "http://localhost:8081");
+      kafkaProperties.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
       
       return kafkaProperties;
    }
