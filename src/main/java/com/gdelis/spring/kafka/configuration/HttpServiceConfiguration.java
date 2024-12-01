@@ -1,6 +1,7 @@
 package com.gdelis.spring.kafka.configuration;
 
 import com.gdelis.spring.kafka.controller.ProductsHttpService;
+import java.rmi.ServerException;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,6 @@ public class HttpServiceConfiguration {
    @Bean
    public HttpServiceProxyFactory httpServiceProxyFactory(@Value("${services.products.url}") final String baseUrl,
                                                           final RestClient.Builder builder) {
-      
       RestClient client = builder.baseUrl(baseUrl)
                                  .defaultHeaders(headers -> {
                                     headers.add("X-Custom-Author", "george-delis");
@@ -29,9 +29,17 @@ public class HttpServiceConfiguration {
                                                 LocalDateTime.now()
                                                              .toString());
                                  })
+                                 //.defaultStatusHandler(HttpStatusCode::is4xxClientError, (request, response) -> {
+                                 //   System.out.println("request.getURI() = " + request.getURI());
+                                 //   System.out.println("response.getStatusText() = " + response.getStatusText());
+                                 //
+                                 //   throw new ClientException("client exception");
+                                 //})
                                  .defaultStatusHandler(HttpStatusCode::isError, (request, response) -> {
-                                    System.out.println("request = " + request.getURI());
-                                    System.out.println("response = " + response.getStatusText());
+                                    System.out.println("request.getURI() = " + request.getURI());
+                                    System.out.println("response.getStatusText() = " + response.getStatusText());
+                                    
+                                    throw new ServerException("server exception");
                                  })
                                  .build();
       

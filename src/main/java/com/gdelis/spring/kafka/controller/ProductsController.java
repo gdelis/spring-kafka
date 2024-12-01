@@ -1,9 +1,12 @@
 package com.gdelis.spring.kafka.controller;
 
 import com.gdelis.spring.kafka.Product;
+import com.gdelis.spring.kafka.exception.ClientException;
+import com.gdelis.spring.kafka.exception.ServerException;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,5 +37,13 @@ public class ProductsController {
    @DeleteMapping("/{id}")
    ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
       return productsHttpService.deleteProduct(id);
+   }
+   
+   @ExceptionHandler(value = {ClientException.class, ServerException.class})
+   public ResponseEntity<Void> handler(RuntimeException e) {
+      System.out.println("e.getMessage() = " + e.getMessage());
+      
+      return ResponseEntity.internalServerError()
+                           .build();
    }
 }
