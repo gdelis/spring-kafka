@@ -22,7 +22,13 @@ public class KafkaProducerConfiguration {
       
       kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
       kafkaProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "producer-user-group-1");
-      //kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+      
+      // configure the number of retries in case the producer receives an error:
+      // kafkaProperties.put(ProducerConfig.RETRIES_CONFIG, 3);
+      // Change the default waiting time between a failed request and then next retry (default value is 100ms):
+      // kafkaProperties.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, "200");
+      
+      // kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,

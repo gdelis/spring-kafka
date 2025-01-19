@@ -44,6 +44,7 @@ public class KafkaMessagesGenerator {
                        .forEach(record -> {
                           record.headers()
                                 .add("producer-header-author", "George Delis".getBytes(StandardCharsets.UTF_8));
+                          // This is an asynchronous send (because we are using a callback method):
                           producer.send(record, genericCallback);
                        });
       };

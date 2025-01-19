@@ -31,6 +31,13 @@ public class KafkaConsumerConfiguration {
       if (e != null) {
          System.out.println("Exception: " + e.getMessage());
       }
+      
+      map.forEach((topicPartition, offsetAndMetadata) -> {
+         System.out.println("topic name: " + topicPartition.topic() + " and partition: " + topicPartition.partition());
+         System.out.println("Offset: " + offsetAndMetadata.offset());
+         System.out.println("Metadata: " + offsetAndMetadata.metadata());
+         System.out.println("Leader epoch: " + offsetAndMetadata.leaderEpoch());
+      });
    };
    
    @Bean
@@ -65,7 +72,7 @@ public class KafkaConsumerConfiguration {
                                         final UserDetailsRepository userDetailsRepository) {
       
       // This should be an external attribute to trigger when the process of kafka messages should stop
-      // For example, when kafka is rebalancing
+      // For example, when kafka is re-balancing
       Boolean closing = false;
       
       return args -> {
