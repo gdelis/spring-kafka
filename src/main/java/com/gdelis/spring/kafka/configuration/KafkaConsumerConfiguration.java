@@ -7,14 +7,17 @@ import com.gdelis.spring.kafka.interceptor.HeadersConsumerInterceptor;
 import com.gdelis.spring.kafka.repository.UserDetailsRepository;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetCommitCallback;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,6 +85,10 @@ public class KafkaConsumerConfiguration {
                try (KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);) {
                   consumer.subscribe(List.of(topic));
                   
+                  // Add custom rebalance listener:
+                  //consumer.subscribe(List.of(topic), consumerRebalanceListener(consumer));
+                  
+                  // Offset commit policy -> Combining synchronous and asynchronous commits
                   while (!closing) {
                      ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(polling));
                      
@@ -99,11 +106,27 @@ public class KafkaConsumerConfiguration {
                      consumer.commitAsync(offsetCommitCallback);
                   }
                   
+                  // We use synchronous commits when we terminate the process (or before re-balance)
                   consumer.commitSync();
                } catch (Exception e) {
                   e.printStackTrace();
                }
             }).start();
+         }
+      };
+   }
+   
+   private ConsumerRebalanceListener consumerRebalanceListener(final KafkaConsumer<String, GenericRecord> consumer) {
+      return new ConsumerRebalanceListener() {
+         @Override
+         public void onPartitionsRevoked(final Collection<TopicPartition> collection) {
+            System.out.println("onPartitionsRevoked");
+            consumer.commitSync();
+         }
+         
+         @Override
+         public void onPartitionsAssigned(final Collection<TopicPartition> collection) {
+            System.out.println("onPartitionsAssigned");
          }
       };
    }
