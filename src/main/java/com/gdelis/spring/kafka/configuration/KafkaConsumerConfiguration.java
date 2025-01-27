@@ -69,7 +69,7 @@ public class KafkaConsumerConfiguration {
    @Bean
    @DependsOn("usersProducerRunner")
    ApplicationRunner usersKafkaConsumer(@Qualifier("usersKafkaConsumerProperties") final Properties consumerProperties,
-                                        @Value("${kafka.users.topic.name}") final String topic,
+                                        @Value("${kafka.users.topic.source.name}") final String topic,
                                         @Value("${kafka.users.topic.partitions}") final Integer partitions,
                                         @Value("${kafka.users.topic.polling}") final Integer polling,
                                         final UserDetailsRepository userDetailsRepository) {

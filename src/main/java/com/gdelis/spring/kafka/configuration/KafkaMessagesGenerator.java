@@ -34,7 +34,7 @@ public class KafkaMessagesGenerator {
    public ApplicationRunner usersProducerRunner(
        @Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
        @Qualifier("usersAvroSchema") Schema userAvroSchema,
-       @Value("${kafka.users.topic.name}") String topic) {
+       @Value("${kafka.users.topic.source.name}") String topic) {
       
       return args -> {
          List<GenericRecord> genericRecords = generateRecords(userAvroSchema);

@@ -15,10 +15,19 @@ public class KafkaTopicConfiguration {
     * @return
     */
    @Bean
-   NewTopic users(@Value("${kafka.users.topic.partitions}") final Integer partitionCount,
-                  @Value("${kafka.users.topic.name}") final String usersTopic) {
-      return TopicBuilder.name(usersTopic)
-                         .partitions(partitionCount)
+   NewTopic usersSink(@Value("${kafka.users.topic.partitions}") final Integer partitions,
+                      @Value("${kafka.users.topic.sink.name}") final String name) {
+      return TopicBuilder.name(name)
+                         .partitions(partitions)
+                         .replicas(1)
+                         .build();
+   }
+   
+   @Bean
+   NewTopic usersSource(@Value("${kafka.users.topic.partitions}") final Integer partitions,
+                        @Value("${kafka.users.topic.source.name}") final String name) {
+      return TopicBuilder.name(name)
+                         .partitions(partitions)
                          .replicas(1)
                          .build();
    }
