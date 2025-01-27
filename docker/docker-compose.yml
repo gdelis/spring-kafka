@@ -84,9 +84,9 @@ services:
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
       CONNECT_LOG4J_LOGGERS: "org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR"
-
     volumes:
       - ./kafka-connect-plugins:/usr/share/java
+
 
   #  kafka-rest:
   #    image: confluentinc/cp-kafka-rest:latest.arm64
