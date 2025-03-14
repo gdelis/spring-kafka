@@ -35,12 +35,12 @@ public class KafkaConsumerConfiguration {
          System.out.println("Exception: " + e.getMessage());
       }
       
-      map.forEach((topicPartition, offsetAndMetadata) -> {
-         System.out.println("topic name: " + topicPartition.topic() + " and partition: " + topicPartition.partition());
-         System.out.println("Offset: " + offsetAndMetadata.offset());
-         System.out.println("Metadata: " + offsetAndMetadata.metadata());
-         System.out.println("Leader epoch: " + offsetAndMetadata.leaderEpoch());
-      });
+      //map.forEach((topicPartition, offsetAndMetadata) -> {
+      //   System.out.println("topic name: " + topicPartition.topic() + " and partition: " + topicPartition.partition());
+      //   System.out.println("Offset: " + offsetAndMetadata.offset());
+      //   System.out.println("Metadata: " + offsetAndMetadata.metadata());
+      //   System.out.println("Leader epoch: " + offsetAndMetadata.leaderEpoch());
+      //});
    };
    
    @Bean
