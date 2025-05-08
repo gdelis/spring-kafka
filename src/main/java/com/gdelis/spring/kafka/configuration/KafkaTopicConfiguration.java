@@ -8,19 +8,26 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfiguration {
-
-   @Value("${kafka.users.topic}")
-   private String usersTopic;
-
+   
    /**
     * Causes the topic to be created on the broker; it is not needed if the topic already exists.
     *
     * @return
     */
    @Bean
-   NewTopic users() {
-      return TopicBuilder.name(usersTopic)
-                         .partitions(1)
+   NewTopic usersSink(@Value("${kafka.users.topic.partitions}") final Integer partitions,
+                      @Value("${kafka.users.topic.sink.name}") final String name) {
+      return TopicBuilder.name(name)
+                         .partitions(partitions)
+                         .replicas(1)
+                         .build();
+   }
+   
+   @Bean
+   NewTopic usersSource(@Value("${kafka.users.topic.partitions}") final Integer partitions,
+                        @Value("${kafka.users.topic.source.name}") final String name) {
+      return TopicBuilder.name(name)
+                         .partitions(partitions)
                          .replicas(1)
                          .build();
    }

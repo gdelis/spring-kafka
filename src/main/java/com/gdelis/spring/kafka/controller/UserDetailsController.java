@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserDetailsController {
-
+   
    private final UserDetailsService userDetailsService;
-
+   
    public UserDetailsController(final UserDetailsService userDetailsService) {
       this.userDetailsService = userDetailsService;
    }
-
+   
    @GetMapping
    public ResponseEntity<List<UserDetails>> getUserDetails() {
       return ResponseEntity.ok(userDetailsService.getAllUserDetails());
    }
-
+   
    @PostMapping
    public ResponseEntity<UserDetails> createUser(@RequestBody final UserDetails user) {
       return ResponseEntity.ok(userDetailsService.createUserDetails(user));
