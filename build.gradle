@@ -1,8 +1,8 @@
 plugins {
   id 'java'
-  id 'org.springframework.boot' version '3.4.3'
+  id 'org.springframework.boot' version '3.5.0'
   id 'io.spring.dependency-management' version '1.1.7'
-  id 'org.graalvm.buildtools.native' version '0.10.4'
+  id 'org.graalvm.buildtools.native' version '0.10.6'
 }
 
 group = 'com.gdelis'
@@ -10,7 +10,7 @@ version = '0.0.1'
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
+    languageVersion = JavaLanguageVersion.of(24)
   }
 }
 
@@ -36,7 +36,7 @@ dependencies {
   implementation "org.apache.avro:avro-maven-plugin:${apacheAvro}"
   implementation "org.apache.avro:avro-compiler:${apacheAvro}"
   implementation 'io.confluent:kafka-avro-serializer:7.6.1'
-//  implementation 'io.confluent:kafka-schema-registry-client:7.6.1'
+  //  implementation 'io.confluent:kafka-schema-registry-client:7.6.1'
   implementation 'org.apache.kafka:kafka-streams'
   implementation "io.confluent:kafka-avro-serializer:${confluentAvro}"
   implementation "io.confluent:kafka-streams-avro-serde:${confluentAvro}"
