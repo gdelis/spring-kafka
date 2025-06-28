@@ -41,7 +41,7 @@ public class KafkaStreamsConfiguration {
       };
    }
    
-   // It is a good practice to externalise the topology of a kafka streams:
+   // It is a good practice to externalize the topology of a kafka streams:
    @Bean
    Topology userDetailsKafkaStreamsTopology(@Value("${kafka.users.topic.source.name}") final String source,
                                             @Value("${kafka.users.topic.sink.name}") final String sink,
