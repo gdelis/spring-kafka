@@ -13,7 +13,8 @@ public class KafkaAdminHealthIndicator implements HealthIndicator {
    
    @Override
    public Health health() {
-      return Health.up()
+      // Define custom health status:
+      return Health.status("WARNING")
                    .build();
    }
    
