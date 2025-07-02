@@ -1,13 +1,12 @@
-package com.gdelis.spring.kafka.configuration.health;
+package com.gdelis.spring.kafka.configuration.health.endpoints;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.TopicDescription;
@@ -90,23 +89,22 @@ public class KafkaManagementEndpoint {
    }
    
    private Topic mapToTopic(final TopicDescription topicDescription) {
-      Topic topic = new Topic();
-      topic.setName(topicDescription.name());
-      topic.setPartitions(topicDescription.partitions()
-                                          .size());
-      topic.setReplicationFactor(topicDescription.partitions()
-                                                 .isEmpty() ? 0 : topicDescription.partitions()
-                                                                                  .getFirst()
-                                                                                  .replicas()
-                                                                                  .size());
-      topic.setEnabled(true); // You can set your own logic here
-      return topic;
+      return Topic.builder()
+                  .name(topicDescription.name())
+                  .partitions(topicDescription.partitions()
+                                              .size())
+                  .replicationFactor(topicDescription.partitions()
+                                                     .isEmpty() ? 0 : topicDescription.partitions()
+                                                                                      .getFirst()
+                                                                                      .replicas()
+                                                                                      .size())
+                  .enabled(true)
+                  .build();
    }
    
+   @Builder
    @Getter
    @Setter
-   @AllArgsConstructor
-   @NoArgsConstructor
    public static class Topic {
       private String name;
       private Integer partitions;

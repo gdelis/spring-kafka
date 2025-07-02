@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("kafka-consumer")
 public class KafkaConsumerHealthIndicator implements HealthIndicator {
+   
    @Override
    public Health health() {
       return Health.up()
