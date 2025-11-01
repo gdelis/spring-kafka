@@ -82,7 +82,7 @@ public class KafkaConsumerConfiguration {
          for (int i = 0; i < partitions; i++) {
             new Thread(() -> {
                
-               try (KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties);) {
+               try (KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(consumerProperties)) {
                   consumer.subscribe(List.of(topic));
                   
                   // Add custom rebalance listener:
