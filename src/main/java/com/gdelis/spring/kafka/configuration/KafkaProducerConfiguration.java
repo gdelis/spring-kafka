@@ -32,6 +32,10 @@ public class KafkaProducerConfiguration {
       // kafkaProperties.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 30000);
       // Determines when a record is considered acknowledged — affects what’s considered a retryable failure. (acks=all is most reliable).
       // kafkaProperties.put(ProducerConfig.ACKS_CONFIG, "all");
+      // Limits how many unacknowledged requests can be in flight per connection. Affects ordering when retries happen.
+      // If max.in.flight.requests.per.connection > 1 and a retry happens, messages can arrive out of order.
+      // To maintain strict ordering, set max.in.flight.requests.per.connection = 1
+      // kafkaProperties.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1);
       
       // kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
