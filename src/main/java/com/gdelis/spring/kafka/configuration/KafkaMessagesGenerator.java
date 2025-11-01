@@ -31,10 +31,9 @@ public class KafkaMessagesGenerator {
    };
    
    @Bean
-   public ApplicationRunner usersProducerRunner(
-       @Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
-       @Qualifier("usersAvroSchema") Schema userAvroSchema,
-       @Value("${kafka.users.topic.source.name}") String topic) {
+   public ApplicationRunner usersProducerRunner(@Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
+                                                @Qualifier("usersAvroSchema") Schema userAvroSchema,
+                                                @Value("${kafka.users.topic.source.name}") String topic) {
       
       return args -> {
          List<GenericRecord> genericRecords = generateRecords(userAvroSchema);
@@ -71,8 +70,7 @@ public class KafkaMessagesGenerator {
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
          
          GenericData.EnumSymbol country = new GenericData.EnumSymbol(userAvroSchema.getField("country")
-                                                                                   .schema(),
-                                                                     CountryEnum.GR.getAbbreviation());
+                                                                                   .schema(), CountryEnum.GR.getAbbreviation());
          genericRecordBuilder.set("country", country);
          
          GenericData.EnumSymbol type = new GenericData.EnumSymbol(userAvroSchema.getField("type")

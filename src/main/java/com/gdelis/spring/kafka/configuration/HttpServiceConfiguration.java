@@ -17,21 +17,18 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class HttpServiceConfiguration {
    
    @Bean
-   public ProductsHttpService productsHttpService(
-       @Qualifier("productsHttpServiceProxyFactory") final HttpServiceProxyFactory proxy) {
+   public ProductsHttpService productsHttpService(@Qualifier("productsHttpServiceProxyFactory") final HttpServiceProxyFactory proxy) {
       
       return proxy.createClient(ProductsHttpService.class);
    }
    
    @Bean
-   public OrdersHttpService ordersHttpService(
-       @Qualifier("productsHttpServiceProxyFactory") final HttpServiceProxyFactory proxy) {
+   public OrdersHttpService ordersHttpService(@Qualifier("productsHttpServiceProxyFactory") final HttpServiceProxyFactory proxy) {
       return proxy.createClient(OrdersHttpService.class);
    }
    
    @Bean
-   public HttpServiceProxyFactory productsHttpServiceProxyFactory(
-       @Value("${services.products.url}") final String baseUrl, final RestClient.Builder builder) {
+   public HttpServiceProxyFactory productsHttpServiceProxyFactory(@Value("${services.products.url}") final String baseUrl, final RestClient.Builder builder) {
       
       RestClient client = builder.baseUrl(baseUrl)
                                  .defaultHeaders(headers -> {
@@ -53,8 +50,7 @@ public class HttpServiceConfiguration {
    }
    
    @Bean
-   public HttpServiceProxyFactory ordersHttpServiceProxyFactory(@Value("${services.orders.url}") final String baseUrl,
-                                                                final RestClient.Builder builder) {
+   public HttpServiceProxyFactory ordersHttpServiceProxyFactory(@Value("${services.orders.url}") final String baseUrl, final RestClient.Builder builder) {
       
       RestClient client = builder.baseUrl(baseUrl)
                                  .defaultHeaders(headers -> {

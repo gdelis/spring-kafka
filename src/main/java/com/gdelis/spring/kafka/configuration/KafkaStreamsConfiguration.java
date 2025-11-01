@@ -45,8 +45,7 @@ public class KafkaStreamsConfiguration {
    @Bean
    Topology userDetailsKafkaStreamsTopology(@Value("${kafka.users.topic.source.name}") final String source,
                                             @Value("${kafka.users.topic.sink.name}") final String sink,
-                                            @Qualifier("userDetailsValueMapper")
-                                            final ValueMapper<Object, Object> userDetailsValueMapper) {
+                                            @Qualifier("userDetailsValueMapper") final ValueMapper<Object, Object> userDetailsValueMapper) {
       // This is a DSL approach:
       StreamsBuilder builder = new StreamsBuilder();
       

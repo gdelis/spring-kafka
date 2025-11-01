@@ -32,17 +32,14 @@ public class KafkaProducerConfiguration {
       kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
       kafkaProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
-                          String.join(",",
-                                      DateHeaderProducerInterceptor.class.getName(),
-                                      AuthorHeaderProducerInterceptor.class.getName()));
+                          String.join(",", DateHeaderProducerInterceptor.class.getName(), AuthorHeaderProducerInterceptor.class.getName()));
       kafkaProperties.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
       
       return kafkaProperties;
    }
    
    @Bean
-   KafkaProducer<String, GenericRecord> usersKafkaProducer(
-       @Qualifier("userKafkaProducerProperties") final Properties producerProperties) {
+   KafkaProducer<String, GenericRecord> usersKafkaProducer(@Qualifier("userKafkaProducerProperties") final Properties producerProperties) {
       return new KafkaProducer<>(producerProperties);
    }
 }
