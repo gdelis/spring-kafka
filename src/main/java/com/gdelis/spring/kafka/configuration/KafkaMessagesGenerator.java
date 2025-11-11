@@ -36,10 +36,10 @@ public class KafkaMessagesGenerator {
                                                 @Value("${kafka.users.topic.source.name}") String topic) {
       
       return args -> {
-         List<GenericRecord> genericRecords = generateRecords(userAvroSchema);
+         List<GenericRecord> genericRecords = generateUsersKafkaMessages(userAvroSchema);
          
          genericRecords.stream()
-                       .map(s -> new ProducerRecord<>(topic, getKafkaMessageKey(s), s))
+                       .map(s -> new ProducerRecord<>(topic, getUsersKafkaMessageKey(s), s))
                        .forEach(record -> {
                           record.headers()
                                 .add("producer-header-author", "George Delis".getBytes(StandardCharsets.UTF_8));
@@ -49,7 +49,26 @@ public class KafkaMessagesGenerator {
       };
    }
    
-   private String getKafkaMessageKey(final GenericRecord s) {
+   @Bean
+   public ApplicationRunner addressProducerRunner(@Qualifier("addressesKafkaProducer") KafkaProducer<String, GenericRecord> producer,
+                                                  @Qualifier("addressesAvroSchema") Schema addressesAvroSchema,
+                                                  @Value("${kafka.addresses.topic.name}") String topic) {
+      
+      return args -> {
+         List<GenericRecord> genericRecords = generateAddressesKafkaMessages(addressesAvroSchema);
+         
+         genericRecords.stream()
+                       .map(s -> new ProducerRecord<>(topic, getAddressesKafkaMessageKey(s), s))
+                       .forEach(record -> {
+                          record.headers()
+                                .add("producer-header-author", "George Delis".getBytes(StandardCharsets.UTF_8));
+                          // This is an asynchronous send (because we are using a callback method):
+                          producer.send(record, genericCallback);
+                       });
+      };
+   }
+   
+   private String getUsersKafkaMessageKey(final GenericRecord s) {
       if (s.get("username") != null) {
          return (String) s.get("username");
       }
@@ -57,7 +76,15 @@ public class KafkaMessagesGenerator {
       return "random";
    }
    
-   private List<GenericRecord> generateRecords(final Schema userAvroSchema) {
+   private String getAddressesKafkaMessageKey(final GenericRecord s) {
+      if (s.get("postcode") != null) {
+         return (String) s.get("postcode");
+      }
+      
+      return "unknown";
+   }
+   
+   private List<GenericRecord> generateUsersKafkaMessages(final Schema userAvroSchema) {
       List<GenericRecord> records = new ArrayList<>();
       
       GenericRecordBuilder genericRecordBuilder = new GenericRecordBuilder(userAvroSchema);
@@ -69,14 +96,33 @@ public class KafkaMessagesGenerator {
          genericRecordBuilder.set("email", "gdelis1989@gmail.com");
          genericRecordBuilder.set("telephone", "222-222-2222-" + i);
          
-         GenericData.EnumSymbol country = new GenericData.EnumSymbol(userAvroSchema.getField("country")
-                                                                                   .schema(), CountryEnum.GR.getAbbreviation());
-         genericRecordBuilder.set("country", country);
-         
          GenericData.EnumSymbol type = new GenericData.EnumSymbol(userAvroSchema.getField("type")
                                                                                 .schema(), UserTypeEnum.ADMIN.name());
          genericRecordBuilder.set("type", type);
+         genericRecordBuilder.set("postcode", "postcode-" + i);
          genericRecordBuilder.set("details", Map.of("city", "tripoli", "providence", "arcadia"));
+         
+         records.add(genericRecordBuilder.build());
+      }
+      
+      return records;
+   }
+   
+   private List<GenericRecord> generateAddressesKafkaMessages(final Schema addressesAvroSchema) {
+      List<GenericRecord> records = new ArrayList<>();
+      
+      GenericRecordBuilder genericRecordBuilder = new GenericRecordBuilder(addressesAvroSchema);
+      
+      for (int i = 0; i < 20; i++) {
+         genericRecordBuilder.set("postcode", "postcode-" + i);
+         genericRecordBuilder.set("address", "address-" + i);
+         genericRecordBuilder.set("number", i);
+         genericRecordBuilder.set("flat", "flat-" + i);
+         genericRecordBuilder.set("building", "building-" + i);
+         
+         GenericData.EnumSymbol country = new GenericData.EnumSymbol(addressesAvroSchema.getField("country")
+                                                                                        .schema(), CountryEnum.GR.getAbbreviation());
+         genericRecordBuilder.set("country", country);
          
          records.add(genericRecordBuilder.build());
       }
