@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class KafkaProducerConfiguration {
    
    @Bean
-   Properties userKafkaProducerProperties() {
+   Properties kafkaProducerProperties() {
       Properties kafkaProperties = new Properties();
       
       kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -48,7 +48,12 @@ public class KafkaProducerConfiguration {
    }
    
    @Bean
-   KafkaProducer<String, GenericRecord> usersKafkaProducer(@Qualifier("userKafkaProducerProperties") final Properties producerProperties) {
-      return new KafkaProducer<>(producerProperties);
+   KafkaProducer<String, GenericRecord> usersKafkaProducer(@Qualifier("kafkaProducerProperties") final Properties properties) {
+      return new KafkaProducer<>(properties);
+   }
+   
+   @Bean
+   KafkaProducer<String, GenericRecord> addressesKafkaProducer(@Qualifier("kafkaProducerProperties") final Properties properties) {
+      return new KafkaProducer<>(properties);
    }
 }
