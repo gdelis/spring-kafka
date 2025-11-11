@@ -1,6 +1,5 @@
 package com.gdelis.spring.kafka.configuration;
 
-import com.gdelis.spring.kafka.CountryEnum;
 import com.gdelis.spring.kafka.UserDetails;
 import com.gdelis.spring.kafka.UserTypeEnum;
 import com.gdelis.spring.kafka.interceptor.HeadersConsumerInterceptor;
@@ -132,9 +131,6 @@ public class KafkaConsumerConfiguration {
    }
    
    private UserDetails userDetailsConverter(final ConsumerRecord<String, GenericRecord> r) {
-      CountryEnum country = CountryEnum.getCountryEnumFromAbbreviationValue(r.value()
-                                                                             .get("country")
-                                                                             .toString());
       UserTypeEnum type = UserTypeEnum.valueOf(r.value()
                                                 .get("type")
                                                 .toString());
@@ -154,8 +150,10 @@ public class KafkaConsumerConfiguration {
                              r.value()
                               .get("telephone")
                               .toString(),
-                             country,
                              type,
+                             r.value()
+                              .get("postcode")
+                              .toString(),
                              null);
    }
 }
