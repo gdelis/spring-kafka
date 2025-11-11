@@ -38,14 +38,7 @@ public class LocalUserDetailsService implements UserDetailsService {
       genericRecordBuilder.set("lastName", user.lastName());
       genericRecordBuilder.set("email", user.email());
       genericRecordBuilder.set("telephone", user.telephone());
-      
-      if (user.country() != null) {
-         GenericData.EnumSymbol country = new GenericData.EnumSymbol(userAvroSchema.getField("country")
-                                                                                   .schema(),
-                                                                     user.country()
-                                                                         .getAbbreviation());
-         genericRecordBuilder.set("country", country);
-      }
+      genericRecordBuilder.set("postcode", user.postcode());
       genericRecordBuilder.set("details", user.details());
       
       if (user.type() != null) {

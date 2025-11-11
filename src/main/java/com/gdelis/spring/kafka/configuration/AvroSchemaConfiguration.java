@@ -24,6 +24,31 @@ public class AvroSchemaConfiguration {
                           .nullable()
                           .stringType()
                           .noDefault()
+                          .name("type")
+                          .type()
+                          .enumeration("UserTypeEnum")
+                          .symbols(UserTypeEnum.USER.name(), UserTypeEnum.ADMIN.name())
+                          .enumDefault(UserTypeEnum.USER.name())
+                          .requiredString("postcode")
+                          .name("details")
+                          .type()
+                          .nullable()
+                          .map()
+                          .values()
+                          .stringType()
+                          .noDefault()
+                          .endRecord();
+   }
+   
+   @Bean
+   Schema addressesAvroSchema() {
+      return SchemaBuilder.record("Address")
+                          .fields()
+                          .requiredString("postcode")
+                          .requiredString("address")
+                          .requiredInt("number")
+                          .optionalString("flat")
+                          .optionalString("building")
                           .name("country")
                           .type()
                           .enumeration("CountryEnum")
@@ -32,18 +57,6 @@ public class AvroSchemaConfiguration {
                                    CountryEnum.UK.getAbbreviation(),
                                    CountryEnum.OTHER.getAbbreviation())
                           .enumDefault(CountryEnum.OTHER.getAbbreviation())
-                          .name("type")
-                          .type()
-                          .enumeration("UserTypeEnum")
-                          .symbols(UserTypeEnum.USER.name(), UserTypeEnum.ADMIN.name())
-                          .enumDefault(UserTypeEnum.USER.name())
-                          .name("details")
-                          .type()
-                          .nullable()
-                          .map()
-                          .values()
-                          .stringType()
-                          .noDefault()
                           .endRecord();
    }
 }
