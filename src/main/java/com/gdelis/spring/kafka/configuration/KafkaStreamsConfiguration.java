@@ -26,6 +26,8 @@ public class KafkaStreamsConfiguration {
       props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
       props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class.getName());
       props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class.getName());
+      // Enable Kafka Streams embedded optimization modem - disabled by default:
+      props.put(StreamsConfig.TOPOLOGY_OPTIMIZATION_CONFIG, StreamsConfig.OPTIMIZE);
       props.put("schema.registry.url", "http://localhost:8081");
       
       return props;
