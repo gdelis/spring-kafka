@@ -59,4 +59,45 @@ public class AvroSchemaConfiguration {
                           .enumDefault(CountryEnum.OTHER.getAbbreviation())
                           .endRecord();
    }
+   
+   @Bean
+   Schema enhancedUserDetailsAvroSchema() {
+      return SchemaBuilder.record("EnhancedUser")
+                          .fields()
+                          .requiredString("username")
+                          .requiredString("firstName")
+                          .requiredString("lastName")
+                          .requiredString("email")
+                          .name("telephone")
+                          .type()
+                          .nullable()
+                          .stringType()
+                          .noDefault()
+                          .name("type")
+                          .type()
+                          .enumeration("UserTypeEnum")
+                          .symbols(UserTypeEnum.USER.name(), UserTypeEnum.ADMIN.name())
+                          .enumDefault(UserTypeEnum.USER.name())
+                          .requiredString("postcode")
+                          .optionalString("address")
+                          .optionalString("number")
+                          .optionalString("flat")
+                          .optionalString("building")
+                          .name("country")
+                          .type()
+                          .enumeration("CountryEnum")
+                          .symbols(CountryEnum.GR.getAbbreviation(),
+                                   CountryEnum.USA.getAbbreviation(),
+                                   CountryEnum.UK.getAbbreviation(),
+                                   CountryEnum.OTHER.getAbbreviation())
+                          .enumDefault(CountryEnum.OTHER.getAbbreviation())
+                          .name("details")
+                          .type()
+                          .nullable()
+                          .map()
+                          .values()
+                          .stringType()
+                          .noDefault()
+                          .endRecord();
+   }
 }
