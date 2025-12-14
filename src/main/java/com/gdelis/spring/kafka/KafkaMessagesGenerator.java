@@ -1,5 +1,7 @@
 package com.gdelis.spring.kafka;
 
+import com.gdelis.spring.kafka.domain.CountryEnum;
+import com.gdelis.spring.kafka.domain.UserTypeEnum;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;

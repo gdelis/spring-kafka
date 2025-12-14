@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka;
+package com.gdelis.spring.kafka.domain;
 
 import lombok.Builder;
 

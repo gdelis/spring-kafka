@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.controller;
 
-import com.gdelis.spring.kafka.Product;
+import com.gdelis.spring.kafka.domain.Product;
 import com.gdelis.spring.kafka.exception.ClientException;
 import com.gdelis.spring.kafka.exception.ServerException;
 import java.util.List;

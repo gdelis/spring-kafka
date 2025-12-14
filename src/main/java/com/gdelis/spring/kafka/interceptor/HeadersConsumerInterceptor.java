@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.interceptor;
 
-import com.gdelis.spring.kafka.UserDetails;
+import com.gdelis.spring.kafka.domain.UserDetails;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecords;

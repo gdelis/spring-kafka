@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka;
+package com.gdelis.spring.kafka.domain;
 
 import com.gdelis.spring.kafka.utils.Telephone;
 import jakarta.validation.constraints.Email;

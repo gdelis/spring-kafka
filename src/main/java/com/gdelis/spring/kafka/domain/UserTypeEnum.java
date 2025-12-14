@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka;
+package com.gdelis.spring.kafka.domain;
 
 public enum UserTypeEnum {
    USER, ADMIN;

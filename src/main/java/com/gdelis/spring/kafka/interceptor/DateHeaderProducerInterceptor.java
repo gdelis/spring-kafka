@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.interceptor;
 
-import com.gdelis.spring.kafka.UserDetails;
+import com.gdelis.spring.kafka.domain.UserDetails;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Map;

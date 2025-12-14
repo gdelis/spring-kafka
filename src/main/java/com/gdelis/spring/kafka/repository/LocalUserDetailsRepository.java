@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.repository;
 
-import com.gdelis.spring.kafka.UserDetails;
+import com.gdelis.spring.kafka.domain.UserDetails;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;

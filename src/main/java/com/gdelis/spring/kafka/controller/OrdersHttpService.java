@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.controller;
 
-import com.gdelis.spring.kafka.Order;
+import com.gdelis.spring.kafka.domain.Order;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

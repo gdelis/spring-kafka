@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.service;
 
-import com.gdelis.spring.kafka.UserDetails;
+import com.gdelis.spring.kafka.domain.UserDetails;
 import com.gdelis.spring.kafka.exception.KafkaException;
 import com.gdelis.spring.kafka.repository.UserDetailsRepository;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.gdelis.spring.kafka.configuration.kafka;
 
-import com.gdelis.spring.kafka.CountryEnum;
-import com.gdelis.spring.kafka.UserTypeEnum;
+import com.gdelis.spring.kafka.domain.CountryEnum;
+import com.gdelis.spring.kafka.domain.UserTypeEnum;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.springframework.context.annotation.Bean;

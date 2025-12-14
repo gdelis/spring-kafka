@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.controller;
 
-import com.gdelis.spring.kafka.UserDetails;
+import com.gdelis.spring.kafka.domain.UserDetails;
 import com.gdelis.spring.kafka.service.UserDetailsService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;

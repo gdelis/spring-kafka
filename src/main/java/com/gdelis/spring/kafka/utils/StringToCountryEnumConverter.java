@@ -1,6 +1,6 @@
 package com.gdelis.spring.kafka.utils;
 
-import com.gdelis.spring.kafka.CountryEnum;
+import com.gdelis.spring.kafka.domain.CountryEnum;
 import java.util.Arrays;
 import org.springframework.core.convert.converter.Converter;
 
