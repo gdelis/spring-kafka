@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka.configuration;
+package com.gdelis.spring.kafka.configuration.kafka;
 
 import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
 import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
@@ -53,7 +53,13 @@ public class KafkaProducerConfiguration {
    }
    
    @Bean
+   KafkaProducer<String, GenericRecord> enhancedUsersKafkaProducer(@Qualifier("kafkaProducerProperties") final Properties properties) {
+      return new KafkaProducer<>(properties);
+   }
+   
+   @Bean
    KafkaProducer<String, GenericRecord> addressesKafkaProducer(@Qualifier("kafkaProducerProperties") final Properties properties) {
       return new KafkaProducer<>(properties);
    }
+   
 }

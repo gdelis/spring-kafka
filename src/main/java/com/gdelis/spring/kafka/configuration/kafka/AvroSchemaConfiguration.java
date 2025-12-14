@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka.configuration;
+package com.gdelis.spring.kafka.configuration.kafka;
 
 import com.gdelis.spring.kafka.CountryEnum;
 import com.gdelis.spring.kafka.UserTypeEnum;
@@ -12,7 +12,6 @@ public class AvroSchemaConfiguration {
    
    @Bean
    Schema usersAvroSchema() {
-      
       return SchemaBuilder.record("User")
                           .fields()
                           .requiredString("username")

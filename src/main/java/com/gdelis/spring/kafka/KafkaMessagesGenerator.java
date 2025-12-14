@@ -1,7 +1,5 @@
-package com.gdelis.spring.kafka.configuration;
+package com.gdelis.spring.kafka;
 
-import com.gdelis.spring.kafka.CountryEnum;
-import com.gdelis.spring.kafka.UserTypeEnum;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,7 @@ public class KafkaMessagesGenerator {
    @Bean
    public ApplicationRunner usersProducerRunner(@Qualifier("usersKafkaProducer") KafkaProducer<String, GenericRecord> producer,
                                                 @Qualifier("usersAvroSchema") Schema userAvroSchema,
-                                                @Value("${kafka.users.topic.source.name}") String topic) {
+                                                @Value("${kafka.topics.users.name}") String topic) {
       
       return args -> {
          List<GenericRecord> genericRecords = generateUsersKafkaMessages(userAvroSchema);
@@ -52,7 +50,7 @@ public class KafkaMessagesGenerator {
    @Bean
    public ApplicationRunner addressProducerRunner(@Qualifier("addressesKafkaProducer") KafkaProducer<String, GenericRecord> producer,
                                                   @Qualifier("addressesAvroSchema") Schema addressesAvroSchema,
-                                                  @Value("${kafka.addresses.topic.name}") String topic) {
+                                                  @Value("${kafka.topics.addresses.name}") String topic) {
       
       return args -> {
          List<GenericRecord> genericRecords = generateAddressesKafkaMessages(addressesAvroSchema);

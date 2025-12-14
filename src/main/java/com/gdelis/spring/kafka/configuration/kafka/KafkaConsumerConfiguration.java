@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka.configuration;
+package com.gdelis.spring.kafka.configuration.kafka;
 
 import com.gdelis.spring.kafka.UserDetails;
 import com.gdelis.spring.kafka.UserTypeEnum;
@@ -43,7 +43,7 @@ public class KafkaConsumerConfiguration {
    };
    
    @Bean
-   Properties usersKafkaConsumerProperties(@Value("${kafka.users.consumer.group.id}") String consumerGroupId) {
+   Properties usersKafkaConsumerProperties(@Value("${kafka.topics.consumer.group.id}") String consumerGroupId) {
       Properties kafkaProperties = new Properties();
       
       kafkaProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -68,9 +68,9 @@ public class KafkaConsumerConfiguration {
    @Bean
    @DependsOn("usersProducerRunner")
    ApplicationRunner usersKafkaConsumer(@Qualifier("usersKafkaConsumerProperties") final Properties consumerProperties,
-                                        @Value("${kafka.users.topic.source.name}") final String topic,
-                                        @Value("${kafka.users.topic.partitions}") final Integer partitions,
-                                        @Value("${kafka.users.topic.polling}") final Integer polling,
+                                        @Value("${kafka.topics.users.name}") final String topic,
+                                        @Value("${kafka.topics.users.partitions}") final Integer partitions,
+                                        @Value("${kafka.topics.users.polling}") final Integer polling,
                                         final UserDetailsRepository userDetailsRepository) {
       
       // This should be an external attribute to trigger when the process of kafka messages should stop
