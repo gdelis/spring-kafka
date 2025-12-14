@@ -79,7 +79,7 @@ public class AvroSchemaConfiguration {
                           .enumDefault(UserTypeEnum.USER.name())
                           .requiredString("postcode")
                           .optionalString("address")
-                          .optionalString("number")
+                          .optionalInt("number")
                           .optionalString("flat")
                           .optionalString("building")
                           .name("country")

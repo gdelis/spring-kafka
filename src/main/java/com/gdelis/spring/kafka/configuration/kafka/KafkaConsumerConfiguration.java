@@ -2,7 +2,7 @@ package com.gdelis.spring.kafka.configuration.kafka;
 
 import com.gdelis.spring.kafka.domain.UserDetails;
 import com.gdelis.spring.kafka.domain.UserTypeEnum;
-import com.gdelis.spring.kafka.interceptor.HeadersConsumerInterceptor;
+import com.gdelis.spring.kafka.configuration.interceptor.HeadersConsumerInterceptor;
 import com.gdelis.spring.kafka.repository.UserDetailsRepository;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import java.time.Duration;

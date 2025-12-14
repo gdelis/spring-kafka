@@ -1,4 +1,4 @@
-package com.gdelis.spring.kafka.interceptor;
+package com.gdelis.spring.kafka.configuration.interceptor;
 
 import com.gdelis.spring.kafka.domain.UserDetails;
 import java.util.Map;

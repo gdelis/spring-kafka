@@ -11,6 +11,7 @@ import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,10 +21,9 @@ public class LocalUserDetailsService implements UserDetailsService {
    private final Schema userAvroSchema;
    private final UserDetailsRepository userDetailsRepository;
    
-   public LocalUserDetailsService(
-       @Qualifier("usersKafkaProducer") final KafkaProducer<String, GenericRecord> kafkaProducer,
-       @Qualifier("usersAvroSchema") final Schema userAvroSchema,
-       final UserDetailsRepository userDetailsRepository) {
+   public LocalUserDetailsService(@Qualifier("usersKafkaProducer") final KafkaProducer<String, GenericRecord> kafkaProducer,
+                                  @Qualifier("usersAvroSchema") final Schema userAvroSchema,
+                                  final UserDetailsRepository userDetailsRepository) {
       this.kafkaProducer = kafkaProducer;
       this.userAvroSchema = userAvroSchema;
       this.userDetailsRepository = userDetailsRepository;

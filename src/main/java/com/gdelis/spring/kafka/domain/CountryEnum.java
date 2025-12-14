@@ -10,9 +10,9 @@ public enum CountryEnum {
    USA("United States of America", "US", "North America"),
    OTHER("Other", "Other", null);
    
-   private String name;
-   private String abbreviation;
-   private String continent;
+   private final String name;
+   private final String abbreviation;
+   private final String continent;
    
    CountryEnum(final String name, final String abbreviation, final String continent) {
       this.name = name;

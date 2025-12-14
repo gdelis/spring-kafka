@@ -1,7 +1,7 @@
 package com.gdelis.spring.kafka.configuration.kafka;
 
-import com.gdelis.spring.kafka.interceptor.AuthorHeaderProducerInterceptor;
-import com.gdelis.spring.kafka.interceptor.DateHeaderProducerInterceptor;
+import com.gdelis.spring.kafka.configuration.interceptor.AuthorHeaderProducerInterceptor;
+import com.gdelis.spring.kafka.configuration.interceptor.DateHeaderProducerInterceptor;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import java.util.Properties;
