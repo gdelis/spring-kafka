@@ -18,7 +18,7 @@ public class KafkaTopicConfiguration {
    NewTopic usersSink(@Value("${kafka.users.topic.partitions}") final Integer partitions,
                       @Value("${kafka.users.topic.sink.name}") final String name) {
       return TopicBuilder.name(name)
-                         .partitions(partitions)
+                         .partitions(1)
                          .replicas(1)
                          .build();
    }
@@ -27,7 +27,7 @@ public class KafkaTopicConfiguration {
    NewTopic usersSource(@Value("${kafka.users.topic.partitions}") final Integer partitions,
                         @Value("${kafka.users.topic.source.name}") final String name) {
       return TopicBuilder.name(name)
-                         .partitions(partitions)
+                         .partitions(1)
                          .replicas(1)
                          .build();
    }
@@ -36,7 +36,7 @@ public class KafkaTopicConfiguration {
    NewTopic addressesSource(@Value("${kafka.addresses.topic.partitions}") final Integer partitions,
                             @Value("${kafka.addresses.topic.name}") final String name) {
       return TopicBuilder.name(name)
-                         .partitions(partitions)
+                         .partitions(1)
                          .replicas(1)
                          .build();
    }
