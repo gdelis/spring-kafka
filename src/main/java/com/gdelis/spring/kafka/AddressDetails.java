@@ -1,5 +1,8 @@
 package com.gdelis.spring.kafka;
 
+import lombok.Builder;
+
+@Builder
 public record AddressDetails(String postcode,
                              String address,
                              Integer number,

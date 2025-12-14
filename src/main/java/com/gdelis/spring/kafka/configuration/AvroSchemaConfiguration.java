@@ -61,7 +61,7 @@ public class AvroSchemaConfiguration {
    }
    
    @Bean
-   Schema enhancedUserDetailsAvroSchema() {
+   Schema enhancedUsersAvroSchema() {
       return SchemaBuilder.record("EnhancedUser")
                           .fields()
                           .requiredString("username")

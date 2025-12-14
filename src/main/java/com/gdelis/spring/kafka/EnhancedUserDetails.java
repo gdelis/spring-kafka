@@ -3,7 +3,9 @@ package com.gdelis.spring.kafka;
 import com.gdelis.spring.kafka.utils.Telephone;
 import jakarta.validation.constraints.Email;
 import java.util.Map;
+import lombok.Builder;
 
+@Builder
 public record EnhancedUserDetails(String username,
                                   String firstName,
                                   String lastName,
