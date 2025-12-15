@@ -31,11 +31,11 @@ public class AvroSchemaConfiguration {
                           .name("country")
                           .type()
                           .enumeration("CountryEnum")
-                          .symbols(CountryEnum.GR.getAbbreviation(),
-                                   CountryEnum.USA.getAbbreviation(),
-                                   CountryEnum.UK.getAbbreviation(),
-                                   CountryEnum.OTHER.getAbbreviation())
-                          .enumDefault(CountryEnum.OTHER.getAbbreviation())
+                          .symbols(CountryEnum.GR.name(),
+                                   CountryEnum.USA.name(),
+                                   CountryEnum.UK.name(),
+                                   CountryEnum.OTHER.name())
+                          .enumDefault(CountryEnum.OTHER.name())
                           .requiredString("postcode")
                           .name("details")
                           .type()
