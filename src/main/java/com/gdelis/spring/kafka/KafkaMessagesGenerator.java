@@ -127,6 +127,7 @@ public class KafkaMessagesGenerator {
          GenericData.EnumSymbol type = new GenericData.EnumSymbol(schema.getField("type")
                                                                         .schema(), UserTypeEnum.ADMIN.name());
          genericRecordBuilder.set("type", type);
+         genericRecordBuilder.set("country", CountryEnum.UK.getAbbreviation());
          genericRecordBuilder.set("postcode", "postcode-" + i);
          genericRecordBuilder.set("details", Map.of("city", "tripoli", "providence", "arcadia"));
          
@@ -174,6 +175,7 @@ public class KafkaMessagesGenerator {
                                                                         .schema(), UserTypeEnum.ADMIN.name());
          genericRecordBuilder.set("type", type);
          
+         genericRecordBuilder.set("country", CountryEnum.UK.getAbbreviation());
          genericRecordBuilder.set("postcode", "postcode-" + i);
          genericRecordBuilder.set("address", "address-" + i);
          genericRecordBuilder.set("number", i);

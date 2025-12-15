@@ -28,6 +28,14 @@ public class AvroSchemaConfiguration {
                           .enumeration("UserTypeEnum")
                           .symbols(UserTypeEnum.USER.name(), UserTypeEnum.ADMIN.name())
                           .enumDefault(UserTypeEnum.USER.name())
+                          .name("country")
+                          .type()
+                          .enumeration("CountryEnum")
+                          .symbols(CountryEnum.GR.getAbbreviation(),
+                                   CountryEnum.USA.getAbbreviation(),
+                                   CountryEnum.UK.getAbbreviation(),
+                                   CountryEnum.OTHER.getAbbreviation())
+                          .enumDefault(CountryEnum.OTHER.getAbbreviation())
                           .requiredString("postcode")
                           .name("details")
                           .type()
